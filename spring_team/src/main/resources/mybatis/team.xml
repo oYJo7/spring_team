@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+ 
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.model.TeamMapper">
+<select id="list" parameterType="Map" resultType="com.model.TeamDTO">
+SELECT teamno, tname, skill, phone, address, zipcode, gender, rdate
+FROM team
+<where>
+	<if test="col=='tname'">
+		tname like concat('%', #{word}, '%')
+	</if>
+	<if test="col=='phone'">
+		phone like concat('%', #{word}, '%')
+	</if>
+	<if test="col=='address'">
+		address like concat('%', #{word}, '%')
+	</if>
+	<if test="col=='skill'">
+		skill like concat('%', #{word}, '%')
+	</if>
+</where>
+ORDER BY teamno DESC
+limit #{sno}, #{eno}
+</select>
+
+<select id="total" parameterType="Map" resultType="int">
+	select count(*) from team
+ <where>
+ 	<if test="col=='tname'">
+		tname like concat('%', #{word}, '%')
+	</if>
+	<if test="col=='phone'">
+		phone like concat('%', #{word}, '%')
+	</if>
+	<if test="col=='address'">
+		address like concat('%', #{word}, '%')
+	</if>
+	<if test="col=='skill'">
+		skill like concat('%', #{word}, '%')
+	</if>
+ </where>
+</select>
+
+<insert id="create" parameterType="com.model.TeamDTO">
+	INSERT INTO
+	team(tname, skill, phone, address, zipcode, gender, rdate)
+	VALUES(#{tname}, #{skill}, #{phone}, #{address}, #{zipcode}, #{gender}, sysdate())
+</insert>
+
+<select id="read" parameterType="int" resultType="com.model.TeamDTO">
+	select *
+	from team
+	where teamno = #{teamno}
+</select>
+
+<delete id="delete" parameterType="int"> 
+	delete from team
+	where teamno = #{teamno}
+</delete>
+
+</mapper>
